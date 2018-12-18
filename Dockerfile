@@ -4,7 +4,7 @@ WORKDIR /home/app
 
 COPY . /home/app/
 
-RUN sbt clean test assembly
+RUN sbt clean test pack
 
 FROM openjdk:8u121-jdk-alpine as ship
 RUN apk --no-cache add curl \
@@ -15,7 +15,7 @@ RUN apk --no-cache add curl \
 
 RUN addgroup -S app && adduser -S -g app app
 WORKDIR /home/app
-COPY --from=builder /home/app/target/scala-2.12/*.jar ./
+COPY --from=builder /home/app/target/pack/lib ./
 
 RUN chown -R app /home/app
 USER app
